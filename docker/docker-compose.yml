@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  covid-abm:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: covid-abm-simulation
+    environment:
+      - PYTHONPATH=/app/src
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../results:/app/results
+      - ../data:/app/data
+    command: python examples/basic_simulation.py
+    
+  jupyter:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: covid-abm-jupyter
+    ports:
+      - "8888:8888"
+    environment:
+      - PYTHONPATH=/app/src
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../docs/notebooks:/app/notebooks
+      - ../results:/app/results
+      - ../data:/app/data
+    command: jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --notebook-dir=/app/notebooks
+    
+  ensemble-runner:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: covid-abm-ensemble
+    environment:
+      - PYTHONPATH=/app/src
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../results:/app/results
+      - ../data:/app/data
+    command: python scripts/run_ensemble.py --n-runs 100 --population-size 100000

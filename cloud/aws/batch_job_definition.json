@@ -1,0 +1,56 @@
+{
+  "jobDefinitionName": "population-abm-simulation",
+  "type": "container",
+  "parameters": {
+    "population_size": "100000",
+    "simulation_days": "365",
+    "n_seeds": "10",
+    "n_runs": "100"
+  },
+  "containerProperties": {
+    "image": "population-abm-epidemiology:latest",
+    "vcpus": 4,
+    "memory": 8192,
+    "jobRoleArn": "arn:aws:iam::ACCOUNT:role/BatchJobRole",
+    "executionRoleArn": "arn:aws:iam::ACCOUNT:role/BatchExecutionRole",
+    "volumes": [
+      {
+        "name": "results",
+        "host": {
+          "sourcePath": "/tmp/population-abm-results"
+        }
+      }
+    ],
+    "mountPoints": [
+      {
+        "sourceVolume": "results",
+        "containerPath": "/app/results",
+        "readOnly": false
+      }
+    ],
+    "environment": [
+      {
+        "name": "AWS_DEFAULT_REGION",
+        "value": "us-west-2"
+      },
+      {
+        "name": "S3_BUCKET",
+        "value": "population-abm-results"
+      }
+    ],
+    "command": [
+      "python",
+      "scripts/run_ensemble.py",
+      "--population-size", "Ref::population_size",
+      "--days", "Ref::simulation_days",
+      "--n-seeds", "Ref::n_seeds",
+      "--n-runs", "Ref::n_runs"
+    ]
+  },
+  "retryStrategy": {
+    "attempts": 3
+  },
+  "timeout": {
+    "attemptDurationSeconds": 3600
+  }
+}

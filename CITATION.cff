@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "COVID-19 ABM Development Team"
+  given-names: ""
+  orcid: "https://orcid.org/0000-0000-0000-0000"
+title: "COVID-19 Agent-Based Model"
+version: 1.0.0
+date-released: 2024-01-01
+url: "https://github.com/Health-AI-UCLA/Population_ABM_Epidemiology_Respiratory_Virus"
+license: MIT
+keywords:
+  - agent-based-model
+  - epidemiology
+  - covid-19
+  - simulation
+  - public-health
+  - infectious-disease
+abstract: "A comprehensive agent-based model for COVID-19 epidemiological simulation with enhanced immunity dynamics, dual vaccine types, and comprehensive intervention modeling."
+repository-code: "https://github.com/Health-AI-UCLA/Population_ABM_Epidemiology_Respiratory_Virus"
+preferred-citation:
+  type: software
+  title: "COVID-19 Agent-Based Model"
+  authors:
+  - family-names: "COVID-19 ABM Development Team"
+  year: 2024
+  url: "https://github.com/Health-AI-UCLA/Population_ABM_Epidemiology_Respiratory_Virus"
+  version: 1.0.0

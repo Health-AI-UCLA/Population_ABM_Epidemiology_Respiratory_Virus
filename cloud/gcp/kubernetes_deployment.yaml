@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: population-abm-simulation
+  labels:
+    app: covid-abm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: covid-abm
+  template:
+    metadata:
+      labels:
+        app: covid-abm
+    spec:
+      containers:
+      - name: covid-abm
+        image: gcr.io/PROJECT_ID/population-abm-epidemiology:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: POPULATION_SIZE
+          value: "100000"
+        - name: SIMULATION_DAYS
+          value: "365"
+        - name: N_SEEDS
+          value: "10"
+        - name: N_RUNS
+          value: "100"
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "2"
+          limits:
+            memory: "8Gi"
+            cpu: "4"
+        volumeMounts:
+        - name: results-storage
+          mountPath: /app/results
+      volumes:
+      - name: results-storage
+        persistentVolumeClaim:
+          claimName: population-abm-results-pvc
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: population-abm-service
+spec:
+  selector:
+    app: covid-abm
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: population-abm-results-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: standard
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: population-abm-ensemble-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: population-abm-ensemble
+        image: gcr.io/PROJECT_ID/population-abm-epidemiology:latest
+        command: ["python", "scripts/run_ensemble.py"]
+        args: ["--population-size", "100000", "--days", "365", "--n-runs", "100"]
+        env:
+        - name: POPULATION_SIZE
+          value: "100000"
+        - name: SIMULATION_DAYS
+          value: "365"
+        - name: N_RUNS
+          value: "100"
+        resources:
+          requests:
+            memory: "8Gi"
+            cpu: "4"
+          limits:
+            memory: "16Gi"
+            cpu: "8"
+        volumeMounts:
+        - name: results-storage
+          mountPath: /app/results
+      volumes:
+      - name: results-storage
+        persistentVolumeClaim:
+          claimName: population-abm-results-pvc
+      restartPolicy: Never
+  backoffLimit: 3

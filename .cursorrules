@@ -1,0 +1,18 @@
+# COVID-19 ABM Project Context
+
+Modular COVID-19 agent-based epidemiological model.
+
+## Structure
+- src/covid_abm/models/: Core components
+- src/covid_abm/analysis/: Ensemble analysis
+- src/covid_abm/utils/: Visualization utilities
+
+## Key Features
+- Population: 100K to 5M agents
+- Immunity: Dual-timescale (2mo reinfection, 3yr severe)
+- Vaccines: Sterilizing vs Non-sterilizing
+- Networks: 4 occupation types
+
+## Performance
+- 5M agents: ~2-4 sec/day
+- Memory: ~10GB per million agents

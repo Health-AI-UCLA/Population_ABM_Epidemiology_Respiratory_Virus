@@ -9,54 +9,64 @@ from typing import List
 class DiseaseParameters:
     """Parameters for disease progression and transmission"""
     # Infectiousness parameters
-    infectious_rate: float = 5.8
-    mean_infectious_period: float = 5.0
-    sd_infectious_period: float = 2.0
-    
+    infectious_rate: float = 35.0
+    mean_infectious_period: float = 7.0
+    sd_infectious_period: float = 2.5
+
     # Gamma distribution parameters for infectiousness curve
     infectiousness_shape: float = 2.0
-    infectiousness_scale: float = 2.5
-    
+    infectiousness_scale: float = 2.0
+
     # Relative infectiousness by disease severity
     asymptomatic_infectious_factor: float = 0.33
     mild_infectious_factor: float = 0.72
     severe_infectious_factor: float = 1.0
-    
+
     # Individual infectiousness variation
-    individual_infectiousness_sd: float = 0.5
-    
+    individual_infectiousness_sd: float = 0.4
+
     # Age-stratified disease progression probabilities
-    fraction_asymptomatic: List[float] = field(default_factory=lambda: [0.7, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.1])
-    fraction_mild: List[float] = field(default_factory=lambda: [0.8, 0.8, 0.73, 0.68, 0.65, 0.59, 0.53, 0.41, 0.27])
-    fraction_hospitalised: List[float] = field(default_factory=lambda: [0.03, 0.08, 0.11, 0.19, 0.24, 0.36, 0.46, 0.48, 0.41])
-    fraction_critical: List[float] = field(default_factory=lambda: [0.05, 0.05, 0.05, 0.05, 0.063, 0.122, 0.274, 0.432, 0.709])
-    fraction_fatality: List[float] = field(default_factory=lambda: [0.33, 0.25, 0.5, 0.5, 0.5, 0.69, 0.65, 0.88, 1.0])
-    
+    fraction_asymptomatic: List[float] = field(default_factory=lambda: [0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.20, 0.15, 0.10])
+    fraction_mild: List[float] = field(default_factory=lambda: [0.48, 0.50, 0.53, 0.55, 0.56, 0.54, 0.50, 0.45, 0.40])
+    fraction_hospitalised: List[float] = field(default_factory=lambda: [0.015, 0.020, 0.035, 0.050, 0.080, 0.120, 0.180, 0.250, 0.300])
+    fraction_critical: List[float] = field(default_factory=lambda: [0.004, 0.005, 0.010, 0.020, 0.040, 0.070, 0.100, 0.150, 0.200])
+    fraction_fatality: List[float] = field(default_factory=lambda: [0.0002, 0.0005, 0.0010, 0.0020, 0.0050, 0.0100, 0.0300, 0.0800, 0.1500])
+
     # Age-stratified susceptibility
     relative_susceptibility: List[float] = field(default_factory=lambda: [0.4, 0.4, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0])
-    
+
     # Time distributions
     mean_time_to_symptoms: float = 5.0
     sd_time_to_symptoms: float = 2.0
-    mean_time_to_hospital: float = 1.4
-    mean_time_to_critical: float = 1.4
-    mean_time_to_death: float = 16.0
-    sd_time_to_death: float = 6.0
-    mean_time_to_recover: float = 16.0
-    sd_time_to_recover: float = 7.0
-    mean_asymptomatic_to_recover: float = 15.0
-    sd_asymptomatic_to_recover: float = 5.0
-    
+    mean_symptom_to_recover_mild: float = 8.0
+    sd_symptom_to_recover_mild: float = 3.0
+    mean_symptom_to_hospital: float = 6.5
+    sd_symptom_to_hospital: float = 2.5
+    mean_hospital_to_recover: float = 10.0
+    sd_hospital_to_recover: float = 4.0
+    mean_hospital_to_critical: float = 3.0
+    sd_hospital_to_critical: float = 1.5
+    mean_critical_to_death: float = 9.0
+    sd_critical_to_death: float = 3.0
+    mean_critical_to_recover: float = 14.0
+    sd_critical_to_recover: float = 5.0
+    mean_time_to_recover: float = 18.0
+    sd_time_to_recover: float = 6.0
+    mean_asymptomatic_to_recover: float = 12.0
+    sd_asymptomatic_to_recover: float = 4.0
+
     # Immunity parameters
-    reinfection_protection_days: float = 60.0
-    severe_protection_days: float = 1095.0
-    severe_protection_decay_rate: float = 0.5
+    reinfection_protection_days: float = 180.0
+    severe_protection_days: float = 540.0
+    severe_protection_decay_rate: float = 0.25
+    reinfection_protection_level: float = 0.75
+    partial_immunity_floor: float = 0.15
 
 @dataclass 
 class NetworkParameters:
     """Parameters for social interaction networks"""
     # Household sizes distribution
-    household_size_dist: List[float] = field(default_factory=lambda: [0.30, 0.35, 0.15, 0.13, 0.04, 0.02])
+    household_size_dist: List[float] = field(default_factory=lambda: [0.28, 0.34, 0.16, 0.13, 0.06, 0.03])
     
     # Age-stratified mean daily interactions
     mean_daily_interactions: List[float] = field(default_factory=lambda: [11.8, 15.6, 14.6, 13.6, 14.7, 13.8, 10.2, 7.6, 4.0])

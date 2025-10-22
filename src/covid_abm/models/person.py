@@ -55,6 +55,7 @@ class Person:
         self.recovery_day = -1
         self.reinfection_protection_end = -1
         self.severe_protection_level = 0.0
+        self.infection_protection_level = 0.0
         self.num_infections = 0
         
         # Vaccination
